@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CSS Effects Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="logo">CSS<span>gen</span></div>
+      <p class="header-sub">Visual CSS effects generator — no fluff, just code.</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="layout">
+
+      <!-- Preview -->
+      <div class="preview-panel">
+        <div class="preview-label">Live Preview</div>
+        <div class="preview-stage">
+          <div class="preview-box" id="preview-box">
+            <span>Preview</span>
+          </div>
+        </div>
+        <div class="css-output-wrap">
+          <div class="css-output-header">
+            <span class="css-output-label">Generated CSS</span>
+            <button class="btn-copy" id="copy-btn" onclick="copyCSS()">Copy</button>
+          </div>
+          <pre class="css-output" id="css-output"></pre>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls-panel">
+
+        <!-- Tabs -->
+        <div class="tabs">
+          <button class="tab active" data-tab="shadow" onclick="switchTab('shadow')">Box Shadow</button>
+          <button class="tab" data-tab="gradient" onclick="switchTab('gradient')">Gradient</button>
+          <button class="tab" data-tab="glass" onclick="switchTab('glass')">Glass</button>
+          <button class="tab" data-tab="text-shadow" onclick="switchTab('text-shadow')">Text Shadow</button>
+          <button class="tab" data-tab="radius" onclick="switchTab('radius')">Radius</button>
+        </div>
+
+        <!-- Box Shadow -->
+        <div class="tab-content active" id="tab-shadow">
+          <div class="control-group">
+            <label>Horizontal Offset <span class="val" id="shadow-x-val">4px</span></label>
+            <input type="range" id="shadow-x" min="-50" max="50" value="4" oninput="update()"/>
+          </div>
+          <div class="control-group">
+            <label>Vertical Offset <span class="val" id="shadow-y-val">4px</span></label>
+            <input type="range" id="shadow-y" min="-50" max="50" value="4" oninput="update()"/>
+          </div>
+          <div class="control-group">
+            <label>Blur Radius <span class="val" id="shadow-blur-val">12px</span></label>
+            <input type="range" id="shadow-blur" min="0" max="100" value="12" oninput="update()"/>
+          </div>
+          <div class="control-group">
+            <label>Spread <span class="val" id="shadow-spread-val">0px</span></label>
+            <input type="range" id="shadow-spread" min="-50" max="50" value="0" oninput="update()"/>
+          </div>
+          <div class="control-group">
+            <label>Opacity <span class="val" id="shadow-opacity-val">20%</span></label>
+            <input type="range" id="shadow-opacity" min="0" max="100" value="20" oninput="update()"/>
+          </div>
+          <div class="control-row">
+            <div class="control-group half">
+              <label>Shadow Color</label>
+              <input type="color" id="shadow-color" value="#000000" oninput="update()"/>
+            </div>
+            <div class="control-group half">
+              <label>Inset</label>
+              <label class="toggle">
+                <input type="checkbox" id="shadow-inset" onchange="update()"/>
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+          </div>
+          <button class="btn-add-layer" onclick="addShadowLayer()">+ Add Layer</button>
+          <div id="shadow-layers"></div>
+        </div>
+
+        <!-- Gradient -->
+        <div class="tab-content" id="tab-gradient">
+          <div class="control-group">
+            <label>Type</label>
+            <div class="segmented" id="gradient-type">
+              <button class="seg active" data-val="linear" onclick="setGradientType('linear')">Linear</button>
+              <button class="seg" data-val="radial" onclick="setGradientType('radial')">Radial</button>
+              <button class="seg" data-val="conic" onclick="setGradientType('conic')">Conic</button>
+            </div>
+          </div>
+          <div class="control-group" id="angle-group">
+            <label>Angle <span class="val" id="gradient-angle-val">135°</span></label>
+            <input type="range" id="gradient-angle" min="0" max="360" value="135" oninput="update()"/>
+          </div>
+          <div class="control-group">
+            <label>Color Stops</label>
+            <div id="gradient-stops">
+              <div class="stop-row">
+                <input type="color" value="#6366f1" oninput="update()"/>
+                <input type="range" min="0" max="100" value="0" oninput="update()"/>
+                <span class="stop-pct">0%</span>
+              </div>
+              <div class="stop-row">
+                <input type="color" value="#ec4899" oninput="update()"/>
+                <input type="range" min="0" max="100" value="100" oninput="update()"/>
+                <span class="stop-pct">100%</span>
+              </div>
+            </div>
+            <button class="btn-add-layer" onclick="addGradientStop()">+ Add Stop</button>
+          </div>
+        </div>
+
+        <!-- Glassmorphism -->
+        <div class="tab-content" id="tab-glass">
+          <div class="control-group">
+            <label>Blur <span class="val" id="glass-blur-val">16px</span></label>
+            <input type="range" id="glass-blur" min="0" max="40" value="16" oninput="update()"/>
+          </div>
+          <div class="control-group">
+            <label>Background Opacity <span class="val" id="glass-opacity-val">15%</span></label>
+            <input type="range" id="glass-opacity" min="0" max="100" value="15" oninput="update()"/>
+          </div>
+          <div class="control-group">
+            <label>Border Opacity <span class="val" id="glass-border-val">20%</span></label>
+            <input type="range" id="glass-border" min="0" max="100" value="20" oninput="update()"/>
+          </div>
+          <div class="control-group">
+            <label>Saturation <span class="val" id="glass-sat-val">180%</span></label>
+            <input type="range" id="glass-sat" min="100" max="300" value="180" oninput="update()"/>
+          </div>
+          <div class="control-group">
+            <label>Glass Color</label>
+            <input type="color" id="glass-color" value="#ffffff" oninput="update()"/>
+          </div>
+        </div>
+
+        <!-- Text Shadow -->
+        <div class="tab-content" id="tab-text-shadow">
+          <div class="control-group">
+            <label>Horizontal <span class="val" id="ts-x-val">2px</span></label>
+            <input type="range" id="ts-x" min="-30" max="30" value="2" oninput="update()"/>
+          </div>
+          <div class="control-group">
+            <label>Vertical <span class="val" id="ts-y-val">2px</span></label>
+            <input type="range" id="ts-y" min="-30" max="30" value="2" oninput="update()"/>
+          </div>
+          <div class="control-group">
+            <label>Blur <span class="val" id="ts-blur-val">4px</span></label>
+            <input type="range" id="ts-blur" min="0" max="50" value="4" oninput="update()"/>
+          </div>
+          <div class="control-group">
+            <label>Opacity <span class="val" id="ts-opacity-val">40%</span></label>
+            <input type="range" id="ts-opacity" min="0" max="100" value="40" oninput="update()"/>
+          </div>
+          <div class="control-group">
+            <label>Color</label>
+            <input type="color" id="ts-color" value="#000000" oninput="update()"/>
+          </div>
+          <div class="control-group">
+            <label>Preview Text</label>
+            <input type="text" id="ts-text" value="CSS is fun" oninput="update()" class="text-input"/>
+          </div>
+        </div>
+
+        <!-- Border Radius -->
+        <div class="tab-content" id="tab-radius">
+          <div class="control-group">
+            <label>Mode</label>
+            <div class="segmented">
+              <button class="seg active" onclick="setRadiusMode('uniform')">Uniform</button>
+              <button class="seg" onclick="setRadiusMode('individual')">Individual</button>
+            </div>
+          </div>
+          <div id="radius-uniform">
+            <div class="control-group">
+              <label>Radius <span class="val" id="radius-all-val">12px</span></label>
+              <input type="range" id="radius-all" min="0" max="100" value="12" oninput="update()"/>
+            </div>
+          </div>
+          <div id="radius-individual" style="display:none">
+            <div class="radius-grid">
+              <div class="control-group">
+                <label>Top Left <span class="val" id="radius-tl-val">12px</span></label>
+                <input type="range" id="radius-tl" min="0" max="100" value="12" oninput="update()"/>
+              </div>
+              <div class="control-group">
+                <label>Top Right <span class="val" id="radius-tr-val">12px</span></label>
+                <input type="range" id="radius-tr" min="0" max="100" value="12" oninput="update()"/>
+              </div>
+              <div class="control-group">
+                <label>Bottom Left <span class="val" id="radius-bl-val">12px</span></label>
+                <input type="range" id="radius-bl" min="0" max="100" value="12" oninput="update()"/>
+              </div>
+              <div class="control-group">
+                <label>Bottom Right <span class="val" id="radius-br-val">12px</span></label>
+                <input type="range" id="radius-br" min="0" max="100" value="12" oninput="update()"/>
+              </div>
+            </div>
+          </div>
+          <div class="control-group" style="margin-top:16px">
+            <label>Box Color</label>
+            <input type="color" id="radius-color" value="#6366f1" oninput="update()"/>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <span>CSSgen · Open source · No tracking</span>
+    <a href="https://github.com/tabato/css-tool" target="_blank">View on GitHub →</a>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
