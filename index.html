@@ -1,9 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CSS Effects Generator</title>
+  <script>
+    (function(){
+      var t=localStorage.getItem('cssgen-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+      document.documentElement.setAttribute('data-theme',t);
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css"/>
@@ -14,6 +20,7 @@
     <div class="header-inner">
       <div class="logo">CSS<span>gen</span></div>
       <p class="header-sub">Visual CSS effects generator — no fluff, just code.</p>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">◑</button>
     </div>
   </header>
 
@@ -22,7 +29,14 @@
 
       <!-- Preview -->
       <div class="preview-panel">
-        <div class="preview-label">Live Preview</div>
+        <div class="preview-label">
+          <span>Live Preview</span>
+          <div class="preview-controls">
+            <span class="preview-scale-label">Scale</span>
+            <input type="range" id="preview-scale" min="50" max="200" value="100" oninput="updatePreviewScale()" class="preview-scale-slider"/>
+            <span class="val" id="preview-scale-val">1×</span>
+          </div>
+        </div>
         <div class="preview-stage">
           <div class="preview-box" id="preview-box">
             <span>Preview</span>
