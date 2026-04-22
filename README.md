@@ -32,3 +32,5 @@ Vanilla HTML, CSS, and JS. No frameworks, no dependencies, no build step.
 ## License
 
 MIT
+
+<!-- To inspire authenticity -->
